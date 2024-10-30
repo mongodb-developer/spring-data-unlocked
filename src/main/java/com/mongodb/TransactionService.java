@@ -23,15 +23,16 @@ public class TransactionService {
         return transactionRepository.findAll(pageable);
     }
 
-
-
-
-
-
     private final TransactionRepository transactionRepository;
 
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
+    }
+
+    public Page<Transaction> findPageableTransactions(
+            Pageable pageable
+    ) {
+        return transactionRepository.findAll(pageable);
     }
 
 
