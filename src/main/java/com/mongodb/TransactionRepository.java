@@ -9,11 +9,12 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends MongoRepository<Transaction, String> {
 
-    @ReadPreference("secondaryPreferred")
+    @ReadPreference("nearest")
     List<Transaction> findByTransactionType(String type);
+
     List<Transaction> findByAmountGreaterThan(double amount);
     void deleteByTransactionType(String type);
-
+    List<Transaction> findByTransactionTypeAndCurrency(String type, String currency);
 
     @Query(
             value= "{ 'status' : ?0 }",

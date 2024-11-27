@@ -26,11 +26,14 @@ public class CustomerController {
        return customerService.totalCustomerByCity();
     }
 
-
-
     @GetMapping("/email/{email}")
     public ResponseEntity<Customer> post(@PathVariable String email) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.findCustomerByEmail(email));
+    }
+
+    @GetMapping("/indexes")
+    public ResponseEntity<String> explain() {
+         return ResponseEntity.ok(customerService.explain());
     }
 
 }

@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransactionService {
 
@@ -35,5 +37,23 @@ public class TransactionService {
         return transactionRepository.findAll(pageable);
     }
 
+    public Transaction save(Transaction transaction) {
+        return transactionRepository.save(transaction);
+    }
 
+    public List<Transaction> findByTransactionTypeAndCurrency(String type, String currency) {
+        return transactionRepository.findByTransactionTypeAndCurrency(type, currency);
+    }
+
+    public List<Transaction> findByTransactionType(String type) {
+        return transactionRepository.findByTransactionType(type);
+    }
+
+    public List<Transaction> findByStatus(String status) {
+        return transactionRepository.getTotalAmountByTransactionType(status);
+    }
+
+    public void exportErrorTransactions() {
+        transactionRepository.exportErrorTransactions();
+    }
 }
