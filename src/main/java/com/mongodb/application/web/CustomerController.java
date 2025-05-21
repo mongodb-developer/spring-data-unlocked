@@ -1,4 +1,4 @@
-package com.mongodb.application;
+package com.mongodb.application.web;
 
 import com.mongodb.domain.model.Customer;
 import com.mongodb.domain.model.CustomersByCity;
