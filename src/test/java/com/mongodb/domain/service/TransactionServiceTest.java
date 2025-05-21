@@ -5,19 +5,21 @@ import com.mongodb.domain.model.Transaction.AccountDetails;
 import com.mongodb.domain.model.Transaction.Beneficiary;
 import com.mongodb.domain.model.Transaction.Originator;
 import com.mongodb.resources.TransactionRepository;
+import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoOperations;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class TransactionServiceTest {
@@ -27,6 +29,9 @@ class TransactionServiceTest {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private MongoOperations mongoOperations;
 
     @BeforeEach
     void setup() {
@@ -94,6 +99,36 @@ class TransactionServiceTest {
         assertThatThrownBy(() -> transactionService.delete("nonexistent-id"))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Transaction not found");
+    }
+
+    @Test
+    void shouldReturnAnEmptyListWhenSearchTransactionWithNullValues() {
+
+        List<Transaction> transactions = transactionService.searchTransactions(null, null, null);
+        assertThat(transactions).isEmpty();
+    }
+
+    @Test
+    void shouldReturnTransactionsByType() {
+        Transaction transaction = transactionService.save(createSampleTransaction("DEBIT", "USD", "PENDING"));
+
+        List<Transaction> transactions = transactionService.searchTransactions("DEBIT", null, null);
+        assertThat(transactions.size()).isEqualTo(1);
+        assertThat(transactions.getFirst().getCurrency()).isEqualTo(transaction.getCurrency());
+    }
+
+    @Test
+    void shouldExportTransactionsWithError() {
+        var transaction = transactionService.save(createSampleTransaction("CREDIT", "EUR", "error"));
+
+        transactionRepository.exportErrorTransactions();
+
+        boolean exists = mongoOperations.collectionExists("transactions_with_error");
+        List<Document> exported = mongoOperations.findAll(Document.class, "transactions_with_error");
+
+        assertThat(exists).isTrue();
+        assertThat(exported.size()).isEqualTo(1);
+        assertThat(exported.getFirst().get("description")).isEqualTo(transaction.getDescription());
     }
 
     private Transaction createSampleTransaction(String type, String currency, String status) {
