@@ -3,9 +3,7 @@ package com.mongodb.domain.service;
 import com.mongodb.domain.model.Transaction;
 import com.mongodb.resources.TransactionRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,21 +43,6 @@ public class TransactionService {
             return transactionRepository.findByStatus(status);
         }
         return List.of();
-    }
-
-
-    public Page<Transaction> findAll(
-            int page,
-            int sizePerPage,
-            String sortField,
-            Sort.Direction sortDirection
-    ) {
-        Pageable pageable = PageRequest.of(
-                page,
-                sizePerPage,
-                Sort.by(sortDirection, sortField)
-        );
-        return transactionRepository.findAll(pageable);
     }
 
     public void exportErrorTransactions() {

@@ -1,9 +1,10 @@
-package com.mongodb.domain.service;
+package com.mongodb.application.web;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.domain.model.Customer;
 import com.mongodb.domain.model.CustomersByCity;
+import com.mongodb.domain.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class CustomerServiceTest {
+public class CustomerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

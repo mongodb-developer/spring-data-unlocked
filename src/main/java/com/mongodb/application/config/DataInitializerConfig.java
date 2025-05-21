@@ -1,7 +1,7 @@
 package com.mongodb.application.config;
 
 import com.mongodb.domain.model.Customer;
- import com.mongodb.domain.model.Transaction;
+import com.mongodb.domain.model.Transaction;
 import com.mongodb.domain.model.Transaction.AccountDetails;
 import com.mongodb.domain.model.Transaction.Beneficiary;
 import com.mongodb.domain.model.Transaction.Originator;
