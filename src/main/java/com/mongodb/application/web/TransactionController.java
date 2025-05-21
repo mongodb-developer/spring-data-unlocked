@@ -22,38 +22,49 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/pageable")
-    public PagedModel<Transaction> findAll(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "100") int sizePerPage,
-                                           @RequestParam(defaultValue = "ID") String sortField,
-                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortDirection) {
-        Pageable pageable = PageRequest.of(page, sizePerPage, Sort.by(sortDirection, sortField));
-        return new PagedModel<>(transactionService.findPageableTransactions(pageable));
-    }
-
-    @GetMapping("/type/{type}/currency/{currency}")
-    public List<Transaction> byTypeAndCurrency(@PathVariable String type, @PathVariable String currency) {
-        return transactionService.findByTransactionTypeAndCurrency(type, currency);
-    }
-
-    @GetMapping("/status/{status}")
-    public List<Transaction> status(@PathVariable String status) {
-        return transactionService.findByStatus(status);
-    }
-
-    @GetMapping("/type/{type}")
-    public List<Transaction> findByTransactionType(@PathVariable String type) {
-        return transactionService.findByTransactionType(type);
-    }
-
-    @GetMapping("/export")
-    public void findByTransactionType() {
-        transactionService.exportErrorTransactions();
-    }
-
     @PostMapping
-    public ResponseEntity<Transaction> create(@RequestBody Transaction transaction) {
+    public ResponseEntity<Transaction> save(@RequestBody Transaction transaction) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.save(transaction));
     }
+
+    @GetMapping
+    public PagedModel<Transaction> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        return new PagedModel<>(transactionService.findAll(pageable));
+    }
+
+    @GetMapping("/search")
+    public List<Transaction> searchTransactions(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String currency,
+            @RequestParam(required = false) String status
+    ) {
+
+        return transactionService.searchTransactions(type, currency, status);
+
+    }
+
+    @PostMapping("/actions/export-errors")
+    public ResponseEntity<Void> exportErrorTransactions() {
+        transactionService.exportErrorTransactions();
+        return ResponseEntity.accepted().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction updated) {
+         return ResponseEntity.ok(transactionService.update(updated));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable String id) {
+        transactionService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
 

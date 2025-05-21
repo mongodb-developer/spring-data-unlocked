@@ -19,7 +19,7 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
 
     @Query(
             value= "{ 'status' : ?0 }",
-            fields="{ 'createdAt':  1, 'accountDetails' : 1, 'amount' : 1}",
+            fields="{ 'transactionType': 1, 'status':  1, 'createdAt':  1, 'accountDetails' : 1, 'amount' : 1}",
             sort = "{ createdAt:  -1}"
     )
     List<Transaction> findByStatus(String status);
@@ -38,7 +38,7 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
     @Aggregation(pipeline = {
             "{ '$match': { 'status': 'error' } }",
             "{ '$project': { '_id': 1, 'amount': 1, 'status': 1, 'description': 1, 'createdAt': 1} }",
-            "{ '$out': 'error_transactions' }"
+            "{ '$out': 'transactions_with_error' }"
     })
     void exportErrorTransactions();
 

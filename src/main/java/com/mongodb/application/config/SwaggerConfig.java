@@ -12,17 +12,25 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-            .info(new Info()
-                .title("Customer API")
-                .version("1.0")
-                .description("API for managing customers in MongoDB"));
+                .info(new Info()
+                        .title("MongoDB with Spring Data API")
+                        .version("1.0")
+                        .description("API for managing customers and transactions in MongoDB"));
     }
 
     @Bean
-    public GroupedOpenApi publicCustomerApi() {
+    public GroupedOpenApi customerApi() {
         return GroupedOpenApi.builder()
-            .group("customers")
-            .pathsToMatch("/customers/**")
-            .build();
+                .group("customers")
+                .pathsToMatch("/customers/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi transactionApi() {
+        return GroupedOpenApi.builder()
+                .group("transactions")
+                .pathsToMatch("/transactions/**")
+                .build();
     }
 }
