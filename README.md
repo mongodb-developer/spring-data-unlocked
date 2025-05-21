@@ -9,9 +9,6 @@ You can read more on:
 
 - [`Spring Data Unlocked: Performance Optimization Techniques With MongoDB`](https://www.mongodb.com/developer/products/mongodb/springdata-performance-optimization-with-mongodb/)
 
-
-
-
 ## Getting Started
 
 ### Prerequisites
