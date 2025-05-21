@@ -34,7 +34,7 @@ public class TransactionService {
             String status) {
 
         if (type != null && currency != null) {
-            return  transactionRepository.findByTransactionTypeAndCurrency(type, currency);
+            return transactionRepository.findByTransactionTypeAndCurrency(type, currency);
         }
         if (type != null) {
             return transactionRepository.findByTransactionType(type);

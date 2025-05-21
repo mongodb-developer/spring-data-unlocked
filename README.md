@@ -89,3 +89,19 @@ This project includes ready-to-use .http files to test all API endpoints easily 
 1. Open the .http file in IntelliJ.
 2. Click on the green "Run" icon next to any request.
 3. You’ll see the response in a built-in HTTP client tab.
+
+## Running Tests & Code Coverage
+This project uses JUnit for testing and JaCoCo for code coverage.
+
+### Run All Tests
+To execute all unit and integration tests in the project:
+
+```bash
+./gradlew test
+```
+
+After the command runs, open the HTML report:
+
+```bash
+/build/jacocoHtml/index.html
+```
