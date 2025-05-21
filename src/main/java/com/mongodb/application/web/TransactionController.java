@@ -1,4 +1,4 @@
-package com.mongodb.application;
+package com.mongodb.application.web;
 
 import com.mongodb.domain.model.Transaction;
 import com.mongodb.domain.service.TransactionService;

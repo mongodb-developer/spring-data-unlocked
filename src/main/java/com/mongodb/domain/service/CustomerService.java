@@ -83,26 +83,23 @@ public class CustomerService {
         return findCustomerByEmail(email);
     }
 
-    public int bulkCustomerSample(List<Customer> customerList) {
-        BulkWriteResult result = mongoOperations.bulkOps(BulkOperations.BulkMode.ORDERED, Customer.class)
-                .insert(customerList)
-                .execute();
-
-        return result.getInsertedCount();
-    }
-
-
-
-
-
-
-
-
-
     public void deleteByEmail(String email) {
         mongoOperations.remove(
                 query(where("email").is(email)),
                 Customer.class
         );
+    }
+
+    public int bulkCustomerSample(List<Customer> customerList) {
+        if (findAll().isEmpty()) {
+            BulkWriteResult result = mongoOperations.bulkOps(BulkOperations.BulkMode.ORDERED, Customer.class)
+                    .insert(customerList)
+                    .execute();
+
+
+            return result.getInsertedCount();
+        }
+
+        return 0;
     }
 }
