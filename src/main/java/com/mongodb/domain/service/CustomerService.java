@@ -36,20 +36,20 @@ public class CustomerService {
         this.mongoOperations = mongoOperations;
     }
 
+
+    public Customer insert(Customer customer) {
+        return mongoOperations.insert(customer);
+    }
+
     public List<Customer> findAll() {
         return this.mongoOperations.findAll(Customer.class);
     }
 
-    public Customer saveCustomer(Customer customer) {
-        return mongoOperations.insert(customer);
-    }
-
-    public int bulkCustomerSample(List<Customer> customerList) {
-        BulkWriteResult result = mongoOperations.bulkOps(BulkOperations.BulkMode.ORDERED, Customer.class)
-                .insert(customerList)
-                .execute();
-
-        return result.getInsertedCount();
+    public Customer findCustomerByEmail(String email) {
+        return mongoOperations.query(Customer.class)
+                .matching(query(where("email").is(email)))
+                .one()
+                .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
     }
 
     public List<CustomersByCity> totalCustomerByCity() {
@@ -64,22 +64,13 @@ public class CustomerService {
         return result.getMappedResults();
     }
 
-    public Customer findCustomerByEmail(String email) {
-        return mongoOperations.query(Customer.class)
-                .matching(query(where("email").is(email)))
-
-                .one()
-                .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
-    }
-
-    public String explain() {
-        MongoCollection<Document> collection = mongoOperations.getCollection("transactions");
-        Document query = new Document("transactionType", "Debit");
+    public String getCustomerIndexExplanation() {
+        MongoCollection<Document> collection = mongoOperations.getCollection("customer");
+        Document query = new Document("email", "ricardo.mello@mongodb.com");
         Document explanation = collection.find(query).explain();
 
         logger.info(explanation.toJson());
         return explanation.toJson();
-
     }
 
     public Customer updatePhoneByEmail(String email, String newPhone) {
@@ -91,6 +82,22 @@ public class CustomerService {
         // Return the updated customer (optional)
         return findCustomerByEmail(email);
     }
+
+    public int bulkCustomerSample(List<Customer> customerList) {
+        BulkWriteResult result = mongoOperations.bulkOps(BulkOperations.BulkMode.ORDERED, Customer.class)
+                .insert(customerList)
+                .execute();
+
+        return result.getInsertedCount();
+    }
+
+
+
+
+
+
+
+
 
     public void deleteByEmail(String email) {
         mongoOperations.remove(

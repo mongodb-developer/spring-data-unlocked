@@ -19,28 +19,28 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        return ResponseEntity.status(201).body(customerService.saveCustomer(customer));
+    public ResponseEntity<Customer> insert(@RequestBody Customer customer) {
+        return ResponseEntity.status(201).body(customerService.insert(customer));
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
+    public ResponseEntity<List<Customer>> findAll() {
         return ResponseEntity.ok(customerService.findAll());
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {
+    public ResponseEntity<Customer> findCustomerByEmail(@RequestParam String email) {
         return ResponseEntity.ok(customerService.findCustomerByEmail(email));
     }
 
     @GetMapping("/report/total-by-city")
-    public ResponseEntity<List<CustomersByCity>> getCustomerTotalsByCity() {
+    public ResponseEntity<List<CustomersByCity>> totalCustomerByCity() {
         return ResponseEntity.ok(customerService.totalCustomerByCity());
     }
 
     @GetMapping("/diagnostics/indexes")
-    public ResponseEntity<String> getIndexExplanation() {
-        return ResponseEntity.ok(customerService.explain());
+    public ResponseEntity<String> getCustomerIndexExplanation() {
+        return ResponseEntity.ok(customerService.getCustomerIndexExplanation());
     }
 
     @PatchMapping("/{email}/phone")

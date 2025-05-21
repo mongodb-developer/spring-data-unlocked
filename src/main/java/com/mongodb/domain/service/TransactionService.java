@@ -1,7 +1,9 @@
 package com.mongodb.domain.service;
 
+import com.mongodb.client.MongoCollection;
 import com.mongodb.domain.model.Transaction;
 import com.mongodb.resources.TransactionRepository;
+import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,4 +60,6 @@ public class TransactionService {
     public void exportErrorTransactions() {
         transactionRepository.exportErrorTransactions();
     }
+
+
 }
