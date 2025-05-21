@@ -1,4 +1,4 @@
-package com.mongodb;
+package com.mongodb.domain.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

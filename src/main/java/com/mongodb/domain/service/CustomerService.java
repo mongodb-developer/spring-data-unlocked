@@ -1,14 +1,11 @@
-package com.mongodb;
+package com.mongodb.domain.service;
 
 import com.mongodb.bulk.BulkWriteResult;
-import com.mongodb.client.ListIndexesIterable;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Projections;
+import com.mongodb.domain.model.Customer;
+import com.mongodb.domain.model.CustomersByCity;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -16,14 +13,14 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Projections.excludeId;
-import static com.mongodb.client.model.Projections.include;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -37,6 +34,10 @@ public class CustomerService {
 
     CustomerService(MongoOperations mongoOperations) {
         this.mongoOperations = mongoOperations;
+    }
+
+    public List<Customer> findAll() {
+        return this.mongoOperations.findAll(Customer.class);
     }
 
     public Customer saveCustomer(Customer customer) {
@@ -79,5 +80,22 @@ public class CustomerService {
         logger.info(explanation.toJson());
         return explanation.toJson();
 
+    }
+
+    public Customer updatePhoneByEmail(String email, String newPhone) {
+        Query query = new Query(Criteria.where("email").is(email));
+        Update update = new Update().set("phone", newPhone);
+
+        mongoOperations.updateFirst(query, update, Customer.class);
+
+        // Return the updated customer (optional)
+        return findCustomerByEmail(email);
+    }
+
+    public void deleteByEmail(String email) {
+        mongoOperations.remove(
+                query(where("email").is(email)),
+                Customer.class
+        );
     }
 }

@@ -1,7 +1,8 @@
-package com.mongodb;
+package com.mongodb.resources;
 
+import com.mongodb.domain.model.CustomerOriginatorDetail;
+import com.mongodb.domain.model.Transaction;
 import org.springframework.data.mongodb.repository.*;
-import org.springframework.data.mongodb.repository.ReadPreference;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

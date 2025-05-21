@@ -1,5 +1,7 @@
-package com.mongodb;
+package com.mongodb.application;
 
+import com.mongodb.domain.model.Transaction;
+import com.mongodb.domain.service.TransactionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

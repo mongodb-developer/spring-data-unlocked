@@ -1,4 +1,4 @@
-package com.mongodb;
+package com.mongodb.domain.model;
 
 import java.util.List;
 

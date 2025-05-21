@@ -1,4 +1,4 @@
-package com.mongodb;
+package com.mongodb.domain.model;
 
 public record Customer(
         String name,

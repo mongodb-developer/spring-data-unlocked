@@ -1,4 +1,4 @@
-package com.mongodb;
+package com.mongodb.resources;
 
 import org.springframework.data.mongodb.repository.Aggregation;
 
